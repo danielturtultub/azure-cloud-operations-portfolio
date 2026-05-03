@@ -1,0 +1,9 @@
+flowchart LR
+    Hub[Hub VNet]
+    Spoke[Spoke VNet]
+
+    Hub -->|hub-to-spoke peering<br/>allowGatewayTransit = true<br/>allowVirtualNetworkAccess = true| Spoke
+    Spoke -->|spoke-to-hub peering<br/>useRemoteGateways = true<br/>allowVirtualNetworkAccess = true| Hub
+
+    Gateway[VPN Gateway in hub<br/>currently designed only]
+    Hub -.serves traffic for spokes.-> Gateway

@@ -1,0 +1,35 @@
+flowchart TB
+    subgraph Subscription["Azure Subscription — eastus"]
+        subgraph Hub["Hub VNet (10.0.0.0/16)"]
+            HubShared[snet-shared]
+            HubBastion[AzureBastionSubnet]
+            HubGW[GatewaySubnet — design only]
+        end
+        subgraph SpokeProd["Spoke — Workload Prod (10.1.0.0/16)"]
+            ProdApp[snet-app]
+            ProdData[snet-data]
+        end
+        subgraph SpokeDev["Spoke — Workload Dev (10.2.0.0/16)"]
+            DevApp[snet-app]
+        end
+        Hub <-->|VNet peering<br/>gateway transit| SpokeProd
+        Hub <-->|VNet peering<br/>gateway transit| SpokeDev
+    end
+
+    subgraph Platform["Shared platform services"]
+        KV[Key Vault<br/>RBAC mode]
+        LAW[Log Analytics<br/>Workspace]
+        RSV[Recovery Services<br/>Vault]
+        AA[Automation Account]
+    end
+
+    subgraph Identity["Identity layer"]
+        Entra[Microsoft Entra ID]
+        Groups[Security & M365 groups]
+        AUs[Administrative Units]
+        CA[Conditional Access policies]
+    end
+
+    Subscription -.governed by.-> Policy[Azure Policy<br/>Initiative]
+    Subscription -.monitored by.-> Platform
+    Subscription -.secured by.-> Identity

@@ -1,0 +1,43 @@
+# Private working files — NEVER commit these
+PRIVATE_*
+PRIVATE/
+
+# Secrets
+*.env
+.env*
+*.pem
+*.key
+*.pfx
+*.p12
+secrets/
+.secrets/
+
+# Cloud credentials
+.azure/
+azureProfile.json
+azureProfile.json.backup
+
+# Terraform / Bicep state
+.terraform/
+*.tfstate
+*.tfstate.backup
+.bicep/
+
+# Editor and OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and dumps
+*.log
+*.dump
+*.cdump
+
+# Local-only working notes
+SCRATCH_*
+WIP_*
+NOTES_*

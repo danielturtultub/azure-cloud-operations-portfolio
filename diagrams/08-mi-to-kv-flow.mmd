@@ -1,0 +1,16 @@
+flowchart LR
+    VM[VM<br/>vm-mi-lab-eus-01]
+    MI[System-assigned<br/>Managed Identity]
+    Entra[Microsoft Entra ID]
+    KV[Key Vault<br/>RBAC mode]
+    Secret[(Secret:<br/>vm-admin-password)]
+
+    VM -->|az login --identity| MI
+    MI -->|requests token| Entra
+    Entra -->|returns access token| MI
+    MI -->|reads secret with token| KV
+    KV --> Secret
+    Secret -->|secret value returned| VM
+
+    Role[Role: Key Vault Secrets User<br/>scope: this vault]
+    Role -.grants.-> MI

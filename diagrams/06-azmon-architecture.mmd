@@ -1,0 +1,27 @@
+flowchart LR
+    subgraph Sources["Telemetry sources"]
+        VM[VMs]
+        KV[Key Vault]
+        ST[Storage]
+        NSG[NSGs]
+        Sub[Subscription Activity]
+    end
+
+    DCR[Data Collection Rules]
+    AMA[Azure Monitor Agent]
+    DS[Diagnostic Settings]
+    LAW[(Log Analytics<br/>Workspace<br/>0.5 GB/day cap)]
+
+    VM --> AMA --> DCR --> LAW
+    KV --> DS --> LAW
+    ST --> DS --> LAW
+    NSG --> DS --> LAW
+    Sub --> DS --> LAW
+
+    LAW --> Q[Saved KQL queries]
+    LAW --> WB[Workbook]
+    LAW --> AL[Alerts]
+
+    AL --> AG[Action group]
+    AG --> Email((Email))
+    AG --> WH((Webhook<br/>future))

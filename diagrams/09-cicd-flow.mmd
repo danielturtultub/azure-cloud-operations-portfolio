@@ -1,0 +1,17 @@
+flowchart LR
+    Push[git push origin main]
+    GHA[GitHub Actions runner]
+    OIDC[GitHub OIDC token]
+    Entra[Microsoft Entra ID<br/>federated credential]
+    AT[Short-lived<br/>access token]
+    Deploy[az deployment group create]
+    ARM[Azure Resource Manager]
+    RG[rg-iac-lab-eastus-01]
+
+    Push --> GHA
+    GHA -->|exchanges| OIDC
+    OIDC -->|verified by subject<br/>repo:.../ref:refs/heads/main| Entra
+    Entra --> AT
+    AT --> Deploy
+    Deploy --> ARM
+    ARM --> RG

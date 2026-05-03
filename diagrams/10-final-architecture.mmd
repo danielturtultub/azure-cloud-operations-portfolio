@@ -1,0 +1,62 @@
+flowchart TB
+    subgraph Identity["Identity (module 02)"]
+        Users[Users + Groups]
+        AUs[Administrative Units]
+        CA[Conditional Access]
+    end
+
+    subgraph Governance["Governance (module 01)"]
+        Policy[Initiative]
+        Lock[RG locks]
+        Budget[Budget + alerts]
+    end
+
+    subgraph Network["Network (module 03)"]
+        Hub[vnet-hub]
+        Prod[vnet-spoke-prod]
+        Dev[vnet-spoke-dev]
+        NSG[NSGs with service tags]
+    end
+
+    subgraph Compute["Compute (module 04)"]
+        VMs[VMs + AvSet]
+        VMSS[VMSS with autoscale]
+    end
+
+    subgraph Storage["Storage (module 05)"]
+        SA[Hardened SA<br/>private endpoint]
+        Files[Azure Files]
+    end
+
+    subgraph Monitor["Monitor (module 06)"]
+        LAW[Log Analytics<br/>0.5 GB/day cap]
+        AG[Action group]
+    end
+
+    subgraph Backup["Backup (module 07)"]
+        RSV[Recovery Services Vault<br/>build-and-tear-down]
+    end
+
+    subgraph Sec["Security (module 08)"]
+        KV[Key Vault<br/>RBAC mode]
+        MI[Managed Identity]
+        Defender[Defender baseline]
+    end
+
+    subgraph IaC["IaC (module 09)"]
+        Bicep[Bicep modules]
+        OIDC[GitHub Actions OIDC]
+        AA[Automation runbooks]
+    end
+
+    Users --> CA
+    Policy -.governs.-> Network & Compute & Storage
+    Network --> Compute & Storage
+    Compute --> KV
+    KV --> SA
+    Compute --> RSV
+    Compute & Storage & KV & Network --> LAW
+    LAW --> AG
+    Bicep --> Network & Compute & Storage & KV
+    OIDC --> Bicep
+    AA --> Compute
